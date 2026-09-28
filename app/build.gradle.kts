@@ -41,7 +41,7 @@ kotlin {
 
 dependencies {
     implementation(project(":core"))
-    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.android)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
 

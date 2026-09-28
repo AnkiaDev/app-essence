@@ -10,7 +10,7 @@ import fr.essence.core.domain.RankedStation
 import fr.essence.core.model.Fuel
 import fr.essence.core.model.GeoPoint
 import fr.essence.core.model.Station
-import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.engine.android.Android
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,7 +32,7 @@ data class StationsUiState(
 
 class StationsViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val api = StationApi(OkHttp.create())
+    private val api = StationApi(Android.create())
     private val locationProvider = LocationProvider(app)
     private val finder = BestStationFinder()
 

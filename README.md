@@ -45,7 +45,7 @@ app-essence/
     └── ui/           StationsViewModel, StationsScreen (Compose), StationsMap (osmdroid)
 ```
 
-Stack : Kotlin 2.4, Jetpack Compose + Material 3, Ktor client (OkHttp), kotlinx.serialization,
+Stack : Kotlin 2.4, Jetpack Compose + Material 3, Ktor client (moteur Android, sans OkHttp), kotlinx.serialization,
 coroutines/StateFlow, osmdroid (carte OpenStreetMap, sans clé ni compte Google), Play Services Location.
 minSdk 26, targetSdk 36.
 
