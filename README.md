@@ -30,6 +30,17 @@ Le flux ne contient **pas** l'enseigne (Total, Leclerc…) ; il faudra la croise
 > mais pas sur une réponse réelle (l'API était injoignable depuis l'environnement de génération).
 > Le parsing est tolérant (champs optionnels, tableaux ou chaînes `;`), à confirmer au premier lancement.
 
+## Dans l'appli
+
+- Carte avec une bulle de prix par station, du vert (moins cher du secteur) au rouge (plus cher) ;
+  ★ sur la meilleure option, bulles grises « Rupture » pour les stations à sec. Tuiles inversées en mode sombre.
+- Panneau glissant : fiche de la station choisie (meilleure par défaut, ou celle touchée sur la carte ou dans la liste)
+  avec prix, distance, économie estimée, fraîcheur du prix et boutons Waze / Google Maps, puis la liste classée.
+- Choix du carburant et du rayon (5, 10, 20 km), mémorisés entre deux lancements.
+- Boutons « me recentrer » et « actualiser » ; rechargement automatique au retour dans l'appli si les prix ont plus de 10 min.
+- Prix de plus de 3 jours signalés « à vérifier sur place ».
+- Mention des sources (prix-carburants.gouv.fr, OpenStreetMap) en bas de la liste.
+
 ## Architecture
 
 ```
@@ -37,12 +48,13 @@ app-essence/
 ├── core/   Module Kotlin/JVM pur, testable sans Android
 │   ├── model/        Fuel, Station, FuelPrice, GeoPoint
 │   ├── data/         StationApi (Ktor + kotlinx.serialization), DTO, mapping
-│   ├── domain/       BestStationFinder, distance haversine
+│   ├── domain/       BestStationFinder, PriceStats (tiers de prix), Freshness, distance haversine
 │   └── navigation/   Liens Waze / Google Maps
 └── app/    Module Android
     ├── MainActivity, Navigator (intents GPS)
+    ├── data/         UserPreferences (carburant et rayon mémorisés)
     ├── location/     FusedLocationProvider (Play Services)
-    └── ui/           StationsViewModel, StationsScreen (Compose), StationsMap (osmdroid)
+    └── ui/           StationsViewModel, StationsScreen (Compose), StationsMap (osmdroid), theme/
 ```
 
 Stack : Kotlin 2.4, Jetpack Compose + Material 3, Ktor client (moteur Android, sans OkHttp), kotlinx.serialization,
@@ -76,7 +88,6 @@ Sans SDK Android, `settings.gradle.kts` n'inclut que `:core`.
 
 ## Pistes suivantes
 
-- Réglages utilisateur (carburant par défaut, taille du plein, conso, rayon) avec DataStore.
-- Liste triée des stations en plus de la carte, fraîcheur des prix (`*_maj`) affichée.
-- Cache hors-ligne et rafraîchissement périodique.
-- Mention « Données : prix-carburants.gouv.fr » visible dans l'appli (exigence de la licence).
+- Réglages avancés (taille du plein, consommation) pour affiner le calcul de la meilleure station.
+- Cache hors-ligne des derniers prix.
+- Enseigne des stations (source à croiser).
