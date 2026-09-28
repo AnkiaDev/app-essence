@@ -3,6 +3,8 @@ package fr.essence.app.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
@@ -24,10 +26,21 @@ import org.osmdroid.util.GeoPoint as OsmPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.TilesOverlay
 import java.util.Locale
 
 private val FRANCE_CENTER = OsmPoint(46.6, 2.4)
+
+/** Inverse les couleurs des tuiles (mode sombre). */
+private val INVERTED_TILES = ColorMatrixColorFilter(
+    ColorMatrix(
+        floatArrayOf(
+            -1f, 0f, 0f, 0f, 255f,
+            0f, -1f, 0f, 0f, 255f,
+            0f, 0f, -1f, 0f, 255f,
+            0f, 0f, 0f, 1f, 0f,
+        ),
+    ),
+)
 
 /**
  * Carte OpenStreetMap (osmdroid) avec une bulle de prix par station, colorée du moins cher
@@ -66,7 +79,7 @@ fun StationsMap(
         modifier = modifier,
         update = { map ->
             // Tuiles inversées en mode sombre pour ne pas éblouir la nuit.
-            map.overlayManager.tilesOverlay.setColorFilter(if (dark) TilesOverlay.INVERTED_COLORS else null)
+            map.overlayManager.tilesOverlay.setColorFilter(if (dark) INVERTED_TILES else null)
 
             map.overlays.clear()
             val bestId = state.best?.station?.id
@@ -151,7 +164,7 @@ private class BubbleFactory(private val context: Context) {
         val padH = 8 * density * scale
         val padV = 4 * density * scale
         val pointer = 6 * density * scale
-        val border = (if (highlighted) 3 else 1.5f) * density
+        val border = (if (highlighted) 3f else 1.5f) * density
         val metrics = textPaint.fontMetrics
         val bodyW = textPaint.measureText(text) + 2 * padH
         val bodyH = (metrics.descent - metrics.ascent) + 2 * padV
