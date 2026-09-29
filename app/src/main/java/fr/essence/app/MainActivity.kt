@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
 import fr.essence.app.ui.StationsScreen
+import fr.essence.app.ui.theme.EssenceTheme
 import org.osmdroid.config.Configuration
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         Configuration.getInstance().userAgentValue = packageName
         enableEdgeToEdge()
         setContent {
-            MaterialTheme {
+            EssenceTheme {
                 StationsScreen()
             }
         }
